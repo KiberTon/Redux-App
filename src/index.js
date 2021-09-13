@@ -1,37 +1,17 @@
-import { createStore } from "redux";
-
-const reducer = (state = 0, action) => {
-  switch (action.type) {
-    case 'INC':
-      return state + 1;
-    case 'DEC':
-      return state - 1;
-    case 'RND':
-      return state + action.value;
-    default:
-      return state;
-  }
-}
-
-const inc = () => {
-  return {
-    type: 'INC'
-  }
-}
+import { createStore, bindActionCreators } from "redux";
+import reducer from './reducer';
+import * as actions from './actions';
 
 const store = createStore(reducer);
+const { dispatch } = store;
 
-document.getElementById('inc').addEventListener('click', () => {
-  store.dispatch({ type: 'INC' })
-});
+const { inc, dec, rnd } = bindActionCreators(actions, dispatch);
 
-document.getElementById('dec').addEventListener('click', () => {
-  store.dispatch({ type: 'DEC' })
-});
-
+document.getElementById('inc').addEventListener('click', inc);
+document.getElementById('dec').addEventListener('click', dec);
 document.getElementById('rnd').addEventListener('click', () => {
   const value = Math.floor(Math.random() * 10);
-  store.dispatch({ type: 'RND', value })
+  rnd(value)
 });
 
 
